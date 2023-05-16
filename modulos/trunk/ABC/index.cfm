@@ -5,8 +5,10 @@
 
     <script type="text/javascript" src="#ext6#build/ext-all.js"></script>
     <script type="text/javascript" src="#ext6#locale/ext-lang-es.js"></script>
+    <script src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
 
     <!-- Funciones -->
+    <script type="text/javascript" src="../../../generales/FileSaver.min.js"></script>
     <script type="text/javascript" src="funciones/fun.abc.constantes.js"></script>
     <script type="text/javascript" src="funciones/fun.abc.js"></script>
 

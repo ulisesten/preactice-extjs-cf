@@ -117,33 +117,6 @@ var funTurGuardar2 = function(){
 
     if( formGuardar.isValid() ){
 
-    /*    var turActual = formGuardar.getValues();
-        var turNuevo = false;
-
-
-        if( turActual.id == 0 || turActual.id == ''){
-            var turIdFinal = 0;
-
-            if(gridBuscar.getStore().getCount() > 0){
-                turIdFinal = gridBuscar.getStore().getAt(0).get('id');
-
-                gridBuscar.getStore().each(function(rec){
-                    turIdFinal = Math.max(turIdFinal, rec.get('id'))
-                })
-
-                turActual.id = turIdFinal + 1;
-                turNuevo = true;
-            }
-        }
-
-        if( turNuevo ) {
-            gridBuscar.getStore().add(turActual);
-        } else {
-            var turAnterior = gridBuscar.getStore().findRecord('id', turActual.id);
-            turAnterior.set(turActual);
-        }
-
-        venGuardar.hide();*/
         formGuardar.submit({
             url: urlTuristas,
             method: 'POST'

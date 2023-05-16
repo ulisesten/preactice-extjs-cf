@@ -1,19 +1,39 @@
 <cfcomponent>
 
-    <cffunction name="abcBuscar" access="remote" returntype="struct">
+    <cffunction name="abcGetFile" access="remote" httpmethod="GET">
+    
+        <cfif isDefined("url.filename")>
+        
+            <cfscript>
+                var myfile = FileRead("C:\ColdFusion2018\cfusion\wwwroot\Trainning\modulos\trunk\ABC\data\#url.filename#");
+            </cfscript>
+            
+            <cfset structReturn = "#myfile#">
+            <cfcontent type="application/pdf" file="C:\ColdFusion2018\cfusion\wwwroot\Trainning\modulos\trunk\ABC\data\#url.filename#"> 
+
+        <cfelse>
+            <cfset structReturn = "No content">
+        
+        </cfif>
 
         
-    
-        <cfset structReturn = {CONSULTA = [], NUMREGISTROS = 0}>
-
-        <cfreturn structReturn>
 
     </cffunction>
 
 
-    <cffunction name="abcGuardar" access="remote" returntype="struct">
+    <cffunction name="abcGuardar" access="remote" returntype="struct" httpmethod="POST">
 
-        <cfset structReturn = {CONSULTA = structNew(), MESSAGE = "SUCCESS", ERRORS = 0, TRUNCATED = 0}>
+        <cfif isDefined("form.tourist_file")>
+            
+            <cfscript>
+                //filename = createTimeSpan(1,1,1,1) & ".pdf"
+                FileWrite("C:\ColdFusion2018\cfusion\wwwroot\Trainning\modulos\trunk\ABC\data\#form.filename#", "#form.tourist_file#"); 
+            </cfscript> 
+            <cfset structReturn = {CONSULTA = {filename: form.filename}, MESSAGE = "Se subio el archivo", ERRORS = 0, TRUNCATED = 0}>
+
+        <cfelse>
+            <cfset structReturn = {CONSULTA = structNew(), MESSAGE = "ERROR", ERRORS = 0, TRUNCATED = 0}>
+        </cfif>
 
         <cfreturn structReturn>
 

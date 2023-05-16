@@ -20,6 +20,25 @@ Ext.onReady(function(){
                 console.log('hola')
             }
         }
+    },{
+        header: 'Acciones',
+        xtype:'actioncolumn',
+        width:70,
+        items: [{
+            iconCls: urlIconoClsSm + 'eye',
+            tooltip: 'Edit',
+            handler: function(grid, rowIndex, colIndex) {
+                var rec = grid.getStore().getAt(rowIndex);
+                funAbcVerArchivo(rec.data.tourist_file);
+            }
+        },{
+            iconCls: urlIconoClsSm + 'trash',
+            tooltip: 'Delete',
+            handler: function(grid, rowIndex, colIndex) {
+                //var rec = grid.getStore().getAt(rowIndex);
+                funAbcBorrarArchivo(rowIndex);
+            }
+        }]
     }]
 
     var pageSize = 10;

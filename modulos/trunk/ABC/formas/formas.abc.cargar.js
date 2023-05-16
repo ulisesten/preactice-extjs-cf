@@ -9,14 +9,16 @@ Ext.onReady(function(){
         allowBlank: false,
         anchor: '100%',
         buttonText: 'Select File...',
-        accept: 'image/*'
+        accept: 'file/*',
     }]
 
     var botones = [{
         text: 'Guardar',
         iconCls: urlIconoCls + 'floppy-o',
         handler: function(){
+
             funAbcCargar();
+            
         }
     }]
 
@@ -35,6 +37,17 @@ Ext.onReady(function(){
         padding: '2 2 2 2',
         initComponent: function(){
             this.callParent(arguments)
+        },
+        proxy: {
+            type: 'ajax',
+            url: urlAbc,
+            extraParams: paramsAbcCargarArch,
+            reader: {
+                type: 'json',
+                root: 'CONSULTA',
+                idProperty: 'id',
+                totalProperty: 'NUMREGISTROS'
+            }
         }
     })
 

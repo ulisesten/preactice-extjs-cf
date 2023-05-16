@@ -1,4 +1,5 @@
 const DATA_STORE_NAME = 'tourist_list';
+const STORAGE_FOLDER = '../data'
 
 var getLocalStorageArray = function(name){
         
@@ -178,7 +179,10 @@ var funAbcCargar = function() {
         touristArray = getLocalStorageArray(DATA_STORE_NAME);
 
         upd_obj = touristArray.findIndex((obj => obj.id == seleccion.id));
-        touristArray[upd_obj].tourist_file = tourist_file;
+        var original_name = tourist_file.split('\\');
+        var new_name = `${Date.now()}-${original_name[original_name.length-1]}`
+
+        touristArray[upd_obj].tourist_file = new_name;
 
         setLocalStorageArray(DATA_STORE_NAME, touristArray)
 
@@ -186,10 +190,95 @@ var funAbcCargar = function() {
         var editTourist = gridBuscar.getStore().findRecord('id', seleccion.id);
         editTourist.set(touristArray[upd_obj])
 
+        funAbcGuardarArchivo(new_name);
+
     }
 
     venCargar.hide();
 }
+
+
+
+var funAbcVerArchivo = function(filename) {
+
+    window.open(serverFilePath + filename);
+    //window.open(fileURL);
+    
+    
+    /*fetch(serverFilePath + filename, {
+        method: 'GET',
+        headers: 'Content-Type=application/pdf;'
+    })
+        .then(response => {
+            var file = new Blob([response], { type: 'application/pdf' });
+            var fileURL = URL.createObjectURL(file);
+            window.open(fileURL);
+            response.json()
+        })
+        .then(data => {
+            
+            
+
+        });*/
+    
+
+}
+
+var funAbcGuardarArchivo= function(filename){
+    let file = Ext.getCmp('formas.abc.cargar')
+                    .up()
+                    .down('filefield')
+                    .el
+                    .down('input[type=file]')
+                    .dom
+                    .files[0];
+
+    var reader = new FileReader();
+
+
+    reader.onload = (function(theFile) {
+
+        return function(e) {
+            
+            let result = e.target.result;
+            console.log(result)
+            const formData = new FormData();
+            formData.append('filename', filename)
+            formData.append("tourist_file", result);
+
+            fetch('http://localhost:8500/Trainning/cfc/trunk/ABC/abc.cfc?method=abcGuardar', {
+                method: "POST", 
+                body: formData
+            });
+            
+        };
+    })(file);
+
+    reader.readAsBinaryString(file);
+    
+    
+}
+
+
+var funAbcBorrarArchivo = function(index) {
+    var gridBuscar = Ext.getCmp('grids.abc.buscar'),
+        formBuscar = Ext.getCmp('formas.abc.buscar').getForm(),
+        store = gridBuscar.getStore();
+
+    Ext.Msg.confirm('Confirmacion', 'Are you sure you want to delete file?', function(btn){
+        if( btn == 'yes' ){
+            
+            //var index = store.find('id', id);
+
+            touristArray = getLocalStorageArray(DATA_STORE_NAME);
+            touristArray[index].tourist_file = "";
+            setLocalStorageArray(DATA_STORE_NAME, touristArray);
+            var anterior = store.getAt(index)
+            anterior.set(touristArray[index])
+        }
+    })
+}
+
 
 
 
@@ -210,9 +299,7 @@ var funAbcEliminar = function(){
                 var index = gridBuscar.getStore().find('id', name.data.id);
 
                 touristArray = getLocalStorageArray(DATA_STORE_NAME);
-                console.log(touristArray);
                 touristArray.splice(index, 1);
-                console.log(touristArray);
                 setLocalStorageArray(DATA_STORE_NAME, touristArray);
 
                 gridBuscar.getStore().removeAt(index);
